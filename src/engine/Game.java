@@ -2,6 +2,7 @@ package engine;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import model.characters.Explorer;
@@ -14,12 +15,12 @@ import model.world.Cell;
 public class Game {
 	
 	// Read-write static variables
-	public static ArrayList<Hero> availableHeroes;
-	public static ArrayList<Hero> heroes;
-	public static ArrayList<Zombie> zombies;
+	public static ArrayList<Hero> availableHeroes = new ArrayList<>();
+	public static ArrayList<Hero> heroes = new ArrayList<>();
+	public static ArrayList<Zombie> zombies = new ArrayList<>();
 	public static Cell[][] map;
 	
-	public static void loadHeroes(String filePath) throws Exception {
+	public static void loadHeroes(String filePath) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
 		String line;
 		while ((line = br.readLine()) != null) {

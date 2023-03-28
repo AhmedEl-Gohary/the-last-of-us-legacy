@@ -8,9 +8,10 @@ public class TrapCell extends Cell {
 	private int trapDamage;
 	
 	public TrapCell() {
-		Random r = new Random();
-		int damage = r.nextInt(3) + 1;
-		trapDamage = damage * 10;
+		Random random = new Random();
+		int[] damageOptions = {10, 20, 30};
+		int index = random.nextInt(damageOptions.length);
+		trapDamage = damageOptions[index];
 	}
 
 	public int getTrapDamage() {

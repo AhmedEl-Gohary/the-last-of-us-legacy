@@ -4,7 +4,7 @@ public class MovementException extends GameActionException {
 
 	public MovementException() {}
 	
-	public MovementException(String s) {
-		super(s);
+	public MovementException(String message) {
+		super(message);
 	}
 }
