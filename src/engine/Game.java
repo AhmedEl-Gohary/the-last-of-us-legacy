@@ -39,5 +39,13 @@ public class Game {
 		}
 	}
 	
+	public static void removeHero(Hero hero) {
+		heroes.remove(hero);
+	}
+	
+	public static void removeZombie(Zombie zombie) {
+		zombies.remove(zombie);
+	}
+	
 	
 }

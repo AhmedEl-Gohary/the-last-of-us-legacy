@@ -7,4 +7,6 @@ public class Fighter extends Hero {
 	}
 	
 	
+	
+	
 }
