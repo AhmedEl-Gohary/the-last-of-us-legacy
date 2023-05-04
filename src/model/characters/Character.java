@@ -2,6 +2,9 @@ package model.characters;
 
 import java.awt.Point;
 
+import engine.Game;
+import model.world.CharacterCell;
+
 public abstract class Character {
 
 	// Read-only instance variables
@@ -38,6 +41,9 @@ public abstract class Character {
 			this.currentHp = 0;
 		else
 			this.currentHp = Math.min(maxHp, currentHp);
+		if (currentHp == 0) {
+			onCharacterDeath();
+		}
 	}
 
 	public Character getTarget() {
@@ -78,18 +84,18 @@ public abstract class Character {
 
 	public void attack() {
 		if (isAdjacent()) {
-			target.setCurrentHp(Math.max(0, target.getCurrentHp() - attackDmg));
+			target.setCurrentHp(target.getCurrentHp() - attackDmg);
 			target.defend(this);
-			// If currHp of target reaches zero call onCharacterDeath
 		}
 	}
 	
 	public void defend(Character character) {
-		character.setCurrentHp(Math.max(0, character.getCurrentHp() - attackDmg / 2));
-		// If currHp of target reaches zero call onCharacterDeath
+		character.setCurrentHp(character.getCurrentHp() - attackDmg / 2);
 	}
 	
-	public abstract void onCharacterDeath();
+	public void onCharacterDeath() {
+		Game.map[location.x][location.y] = new CharacterCell(null);
+	}
 	
 	
 

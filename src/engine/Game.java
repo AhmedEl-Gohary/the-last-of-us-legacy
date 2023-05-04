@@ -11,6 +11,7 @@ import model.characters.Hero;
 import model.characters.Medic;
 import model.characters.Zombie;
 import model.world.Cell;
+import model.world.CharacterCell;
 
 public class Game {
 	
@@ -45,6 +46,16 @@ public class Game {
 	
 	public static void removeZombie(Zombie zombie) {
 		zombies.remove(zombie);
+	}
+	
+	public static void setMap(boolean flag) {
+		for(int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if (Game.map[i][j] != null) {
+					Game.map[i][j].setVisible(flag);
+				}
+			}
+		}
 	}
 	
 	

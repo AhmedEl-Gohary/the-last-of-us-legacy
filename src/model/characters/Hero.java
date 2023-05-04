@@ -4,8 +4,16 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import engine.Game;
+import engine.Valid;
+import exceptions.InvalidTargetException;
+import exceptions.MovementException;
+import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
+import model.world.Cell;
+import model.world.CharacterCell;
+import model.world.CollectibleCell;
+import model.world.TrapCell;
 
 public abstract class Hero extends Character {
 
@@ -60,23 +68,21 @@ public abstract class Hero extends Character {
 		// check if tou can attack
 		super.attack();
 
-		// The target is always a zombie
-		if (getTarget().getCurrentHp() <= 0) {
-			getTarget().onCharacterDeath();
+		// The target
+		if (this instanceof Fighter && specialAction) {
+			return;
 		}
-		if (!(this instanceof Fighter)) {
-			actionsAvailable--;
-		}
+		actionsAvailable--;
 	}
 
 	public void onCharacterDeath() {
+		super.onCharacterDeath();
 		Game.removeHero(this);
 	}
 
-	public void move(Direction direction) {
+	private Point dirToPoint(Direction direction) {
 		int x = getLocation().x;
 		int y = getLocation().y;
-		removeVisibleCells(x, y);
 		switch (direction) {
 		case UP:
 			y++;
@@ -91,37 +97,51 @@ public abstract class Hero extends Character {
 			x--;
 			break;
 		}
-		// Handle out of bounds exception
+		return new Point(x, y);
+	}
+	
+	public void move(Direction direction) throws MovementException, NotEnoughActionsException {
+		Point p = dirToPoint(direction);
+		if (!Valid.isLocationValid(p)) {
+			throw new MovementException();
+		}
+		if (getActionsAvailable() <= 0) {
+			throw new NotEnoughActionsException();
+		}
+		if (Game.map[p.x][p.y] instanceof CharacterCell && ((CharacterCell) Game.map[p.x][p.y]).getCharacter() != null) {
+			throw new MovementException();
+		}
 		
-		setLocation(new Point(x, y));
-		Game.map[x][y].setVisible(true);
-		setVisibleCells(x, y);
+		Cell cell = Game.map[p.x][p.y];
+		if (cell instanceof CollectibleCell) {
+			 ((CollectibleCell) cell).getCollectible().pickUp(this);
+		} else if (cell instanceof TrapCell) {
+			setCurrentHp(getCurrentHp() - ((TrapCell) cell).getTrapDamage());
+		}
+		
+		Game.map[getLocation().x][getLocation().y] = new CharacterCell(null);
+		
+		setLocation(p);
+		Game.map[p.x][p.y] = new CharacterCell(this);
+		setVisibleCells(p.x, p.y);
 		actionsAvailable--;
 	}
 	
 	private void setVisibleCells(int x, int y) {
-		int[] dx = {1, -1, 0, 0, 1, -1, 1, -1};
-		int[] dy = {1, -1, 1, -1, 0 , 0, -1, 1};
+		int[] dx = {1, -1, 0, 0, 1, -1, 1, -1, 0};
+		int[] dy = {1, -1, 1, -1, 0 , 0, -1, 1, 0};
 		for (int i = 0; i < 8; i++) {
-			Game.map[x + dx[i]][y + dy[i]].setVisible(true);
+			int row = x + dx[i];
+			int column = y + dy[i];
+			if (Valid.isLocationValid(new Point(row, column))) {
+				Game.map[row][column].setVisible(true);
+			}
 		}
 	}
 	
-	private void removeVisibleCells(int x, int y) {
-		int[] dx = {1, -1, 0, 0, 1, -1, 1, -1};
-		int[] dy = {1, -1, 1, -1, 0 , 0, -1, 1};
-		for (int i = 0; i < 8; i++) {
-			Game.map[x + dx[i]][y + dy[i]].setVisible(false);
-		}
-	}
-	
-	public void useSpecial() {
+	public void useSpecial() throws InvalidTargetException {
 		actionsAvailable--;
 		supplyInventory.get(0).use(this);
 		specialAction  = true;
 	}
-	
-	
-	
-
 }

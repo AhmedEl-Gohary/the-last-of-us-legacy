@@ -11,20 +11,8 @@ public class Zombie extends Character {
 		super("Zombie " + (++ZOMBIES_COUNT), 40, 10);
 	}
 
-	@Override
-	public void attack() {
-		super.attack();
-
-		// The target is always a zombie
-		if (getTarget().getCurrentHp() <= 0) {
-			getTarget().onCharacterDeath();
-		}
-	}
-
 	public void onCharacterDeath() {
-		if (getCurrentHp() <= 0) {
-			Game.removeZombie(this);
-			ZOMBIES_COUNT--;
-		}
+		super.onCharacterDeath();
+		Game.removeZombie(this);
 	}
 }
