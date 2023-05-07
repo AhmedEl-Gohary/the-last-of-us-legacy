@@ -1,6 +1,7 @@
 package model.characters;
 
 import exceptions.InvalidTargetException;
+import exceptions.NoAvailableResourcesException;
 
 public class Medic extends Hero {
 	
@@ -8,14 +9,16 @@ public class Medic extends Hero {
 		super(name, maxHp, attackDmg, maxActions);
 	}
 	
-	public void useSpecial() throws InvalidTargetException {
-		if (!(getTarget() instanceof Hero)) throw new InvalidTargetException();
+	public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
+		if (!(getTarget() instanceof Hero)) {
+			throw new InvalidTargetException();
+		}
 		super.useSpecial();
-		heal((Hero)getTarget());
+		heal((Hero) getTarget());
 		setSpecialAction(getSupplyInventory().size() > 0);
 	}
 	
 	private void heal(Hero hero) {
-		hero.setCurrentHp(getMaxHp());
+		hero.setCurrentHp(hero.getMaxHp());
 	}
 }

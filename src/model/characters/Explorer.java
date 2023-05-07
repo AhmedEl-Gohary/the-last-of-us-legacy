@@ -2,6 +2,7 @@ package model.characters;
 
 import engine.Game;
 import exceptions.InvalidTargetException;
+import exceptions.NoAvailableResourcesException;
 
 public class Explorer extends Hero {
 	
@@ -10,8 +11,8 @@ public class Explorer extends Hero {
 	}
 	
 	@Override
-	public void useSpecial() throws InvalidTargetException {
+	public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
 		super.useSpecial();
-		Game.setMap(false);
+		Game.setMap(true);
 	}
 }

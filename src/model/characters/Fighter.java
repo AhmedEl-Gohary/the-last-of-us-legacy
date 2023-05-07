@@ -6,7 +6,4 @@ public class Fighter extends Hero {
 		super(name, maxHp, attackDmg, maxActions);
 	}
 	
-	
-	
-	
 }

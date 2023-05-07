@@ -2,11 +2,13 @@ package model.characters;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 import engine.Game;
 import engine.Valid;
 import exceptions.InvalidTargetException;
 import exceptions.MovementException;
+import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
@@ -64,11 +66,15 @@ public abstract class Hero extends Character {
 	}
 
 	@Override
-	public void attack() {
-		// check if tou can attack
+	public void attack() throws InvalidTargetException, NotEnoughActionsException {
+		if (!(getTarget() instanceof Zombie)) {
+			throw new InvalidTargetException();
+		}
+		if (getActionsAvailable() <= 0) {
+			throw new NotEnoughActionsException();
+		}
 		super.attack();
 
-		// The target
 		if (this instanceof Fighter && specialAction) {
 			return;
 		}
@@ -85,16 +91,16 @@ public abstract class Hero extends Character {
 		int y = getLocation().y;
 		switch (direction) {
 		case UP:
-			y++;
-			break;
-		case DOWN:
-			y--;
-			break;
-		case RIGHT:
 			x++;
 			break;
-		case LEFT:
+		case DOWN:
 			x--;
+			break;
+		case RIGHT:
+			y++;
+			break;
+		case LEFT:
+			y--;
 			break;
 		}
 		return new Point(x, y);
@@ -127,7 +133,7 @@ public abstract class Hero extends Character {
 		actionsAvailable--;
 	}
 	
-	private void setVisibleCells(int x, int y) {
+	public void setVisibleCells(int x, int y) {
 		int[] dx = {1, -1, 0, 0, 1, -1, 1, -1, 0};
 		int[] dy = {1, -1, 1, -1, 0 , 0, -1, 1, 0};
 		for (int i = 0; i < 8; i++) {
@@ -139,9 +145,52 @@ public abstract class Hero extends Character {
 		}
 	}
 	
-	public void useSpecial() throws InvalidTargetException {
-		actionsAvailable--;
+	public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
+		if (specialAction) return;
+		if (supplyInventory.isEmpty()) {
+			throw new NoAvailableResourcesException();
+		}
 		supplyInventory.get(0).use(this);
 		specialAction  = true;
+	}
+	
+	public void cure() throws InvalidTargetException, NoAvailableResourcesException, NotEnoughActionsException {
+		if (!(getTarget() instanceof Zombie) || !isAdjacent()) {
+			throw new InvalidTargetException();
+		}
+		
+		if (getVaccineInventory().isEmpty()) {
+			throw new NoAvailableResourcesException();
+		}
+		
+		if (getActionsAvailable() <= 0) {
+			throw new NotEnoughActionsException();
+		}
+		
+		Point p = getTarget().getLocation();
+		
+		// Get random hero
+		Random random = new Random();
+		int idx = random.nextInt(Game.availableHeroes.size());
+		Hero hero = Game.availableHeroes.remove(idx);
+		
+		// Remove zombie
+		Game.zombies.remove(getTarget());
+		
+		// Update the map
+		Game.map[p.x][p.y] = new CharacterCell(hero);
+		
+		// Add new hero
+		Game.heroes.add(hero);
+		
+		// Set location and visible cells of the new hero
+		hero.setLocation(p);
+		setVisibleCells(p.x, p.y);
+		
+		// Remove one vaccine
+		getVaccineInventory().get(0).use(this);
+		
+		// Decrement Available actions
+		actionsAvailable--;
 	}
 }

@@ -1,6 +1,13 @@
 package model.characters;
 
+import java.awt.Point;
+
 import engine.Game;
+import engine.Valid;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+import model.world.Cell;
+import model.world.CharacterCell;
 
 public class Zombie extends Character {
 
@@ -14,5 +21,32 @@ public class Zombie extends Character {
 	public void onCharacterDeath() {
 		super.onCharacterDeath();
 		Game.removeZombie(this);
+		// Spawn new zombie
+	}
+	
+	public void attackAdjacentHero() {
+		int[] dx = {1, -1, 0, 0, 1, -1, 1, -1, 0};
+		int[] dy = {1, -1, 1, -1, 0 , 0, -1, 1, 0};
+		for (int i = 0; i < 8; i++) {
+			int row = getLocation().x + dx[i];
+			int column = getLocation().y + dy[i];
+			if (Valid.isLocationValid(new Point(row, column))) {
+				Cell cell = Game.map[row][column];
+				if (cell instanceof CharacterCell) {
+					Character character = ((CharacterCell) cell).getCharacter();
+					if (character != null && character instanceof Hero) {
+						setTarget(character);
+						try {
+							attack();
+						} catch (InvalidTargetException e) {
+							e.printStackTrace();
+						} catch (NotEnoughActionsException e) {
+							e.printStackTrace();
+						}
+						return;
+					}
+				}
+			}
+		}
 	}
 }

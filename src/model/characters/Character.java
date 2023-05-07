@@ -3,6 +3,8 @@ package model.characters;
 import java.awt.Point;
 
 import engine.Game;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 import model.world.CharacterCell;
 
 public abstract class Character {
@@ -70,7 +72,7 @@ public abstract class Character {
 		return Math.abs(x - y);
 	}
 	
-	private boolean isAdjacent() {
+	public boolean isAdjacent() {
 		if (distance(target.location.x, location.x) == 1
 				&& (distance(target.location.y, location.y) == 1)) {
 			return true;
@@ -82,11 +84,12 @@ public abstract class Character {
 		return false;
 	}
 
-	public void attack() {
-		if (isAdjacent()) {
-			target.setCurrentHp(target.getCurrentHp() - attackDmg);
-			target.defend(this);
+	public void attack() throws InvalidTargetException, NotEnoughActionsException {
+		if (!isAdjacent()) {
+			throw new InvalidTargetException();
 		}
+		target.setCurrentHp(target.getCurrentHp() - attackDmg);
+		target.defend(this);
 	}
 	
 	public void defend(Character character) {
