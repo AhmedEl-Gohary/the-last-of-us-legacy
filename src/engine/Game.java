@@ -144,6 +144,7 @@ public class Game {
 		spawnZombies();
 		spawnCollectibles();
 	}
+	// now we will continue after start game
 	
 	/*
 	 * public static void endTurn(): This method is called when the player decides to end the turn.
