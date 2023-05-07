@@ -20,7 +20,6 @@ import model.world.CollectibleCell;
 import model.world.TrapCell;
 
 public class Game {
-	// ahmed tawfik Gohary
 	// Read-write static variables
 	public static ArrayList<Hero> availableHeroes = new ArrayList<>();
 	public static ArrayList<Hero> heroes = new ArrayList<>();
