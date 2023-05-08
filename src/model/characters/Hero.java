@@ -140,7 +140,8 @@ public abstract class Hero extends Character {
 			int row = x + dx[i];
 			int column = y + dy[i];
 			if (Valid.isLocationValid(new Point(row, column))) {
-				Game.map[row][column].setVisible(true);
+				if (Game.map[row][column] != null)
+					Game.map[row][column].setVisible(true);
 			}
 		}
 	}

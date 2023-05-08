@@ -155,7 +155,10 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 	
 	public static void endTurn() {
 		setMap(false);
-		zombies.forEach(zombie -> zombie.attackAdjacentHero());
+		zombies.forEach(zombie -> { 
+			zombie.attack();
+			zombie.setTarget(null);
+		});
 		heroes.forEach(hero -> {
 			hero.setVisibleCells(hero.getLocation().x, hero.getLocation().y);
 			hero.setActionsAvailable(hero.getMaxActions());
@@ -166,11 +169,33 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 	}
 	
 	public static boolean checkWin() {
-		return heroes.size() >= 5 && Vaccine.vaccineCount == 0;
+		return heroes.size() >= 5 && noVaccines() && allVaccinesUsed();
 	}
 	
 	public static boolean checkGameOver() {
-		return Vaccine.vaccineCount == 0 || heroes.size() == 0;
+		return noVaccines()|| heroes.size() == 0;
+	}
+	
+	private static boolean noVaccines() {
+		int vaccinesCnt = 0;
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if (map[i][j] != null && map[i][j] instanceof CollectibleCell &&
+						((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
+					vaccinesCnt++;
+				}
+			}
+		}
+		return vaccinesCnt == 0;
+	}
+	
+	private static boolean allVaccinesUsed() {
+		for (Hero hero : heroes) {
+			if (!hero.getVaccineInventory().isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

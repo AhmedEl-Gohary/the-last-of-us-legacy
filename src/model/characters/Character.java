@@ -43,7 +43,7 @@ public abstract class Character {
 			this.currentHp = 0;
 		else
 			this.currentHp = Math.min(maxHp, currentHp);
-		if (currentHp == 0) {
+		if (currentHp <= 0) {
 			onCharacterDeath();
 		}
 	}

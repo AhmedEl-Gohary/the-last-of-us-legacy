@@ -8,8 +8,6 @@ import model.characters.Hero;
 import model.world.CharacterCell;
 
 public class Vaccine implements Collectible {
-
-	public static int vaccineCount = 5;
 	
 	public Vaccine() {}
 	
@@ -44,7 +42,6 @@ public class Vaccine implements Collectible {
 		// Set location and visible cells of the new hero
 		newHero.setLocation(p);
 		newHero.setVisibleCells(p.x, p.y);
-		vaccineCount--;
 	}
 	
 }
