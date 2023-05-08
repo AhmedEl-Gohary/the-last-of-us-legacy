@@ -144,6 +144,7 @@ public class Game {
 		spawnZombies();
 		spawnCollectibles();
 	}
+	
 	// now we will continue after start game
 	
 	/*
@@ -173,7 +174,7 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 	}
 	
 	public static boolean checkGameOver() {
-		return noVaccines()|| heroes.size() == 0;
+		return (allVaccinesUsed() && noVaccines()) || heroes.size() == 0;
 	}
 	
 	private static boolean noVaccines() {

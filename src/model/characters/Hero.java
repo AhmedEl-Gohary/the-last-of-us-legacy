@@ -136,7 +136,7 @@ public abstract class Hero extends Character {
 	public void setVisibleCells(int x, int y) {
 		int[] dx = {1, -1, 0, 0, 1, -1, 1, -1, 0};
 		int[] dy = {1, -1, 1, -1, 0 , 0, -1, 1, 0};
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < dx.length; i++) {
 			int row = x + dx[i];
 			int column = y + dy[i];
 			if (Valid.isLocationValid(new Point(row, column))) {
