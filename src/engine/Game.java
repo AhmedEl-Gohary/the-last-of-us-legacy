@@ -26,6 +26,7 @@ public class Game {
 	public static ArrayList<Hero> heroes = new ArrayList<>();
 	public static ArrayList<Zombie> zombies = new ArrayList<>();
 	public static Cell[][] map;
+	public static int[][] check= new int[15][15];
 	
 	public static void loadHeroes(String filePath) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -76,7 +77,7 @@ public class Game {
 	
 	private static boolean isFree(Point p) {
 		return	map[p.x][p.y] instanceof CharacterCell && 
-					((CharacterCell) map[p.x][p.y]).getCharacter() == null;
+					((CharacterCell) map[p.x][p.y]).getCharacter() == null && check[p.x][p.y] == 0;
 	}
 	
 	
@@ -167,6 +168,9 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 			hero.setTarget(null);
 		});
 		addZombie();
+		for (int i = 0;i<15;i++) {
+			for (int j = 0;j<15;j++) check[i][j] = 0;
+		}
 	}
 	
 	public static boolean checkWin() {

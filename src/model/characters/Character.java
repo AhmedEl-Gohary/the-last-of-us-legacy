@@ -1,5 +1,6 @@
 package model.characters;
 
+import java.awt.Checkbox;
 import java.awt.Point;
 
 import engine.Game;
@@ -98,6 +99,8 @@ public abstract class Character {
 	
 	public void onCharacterDeath() {
 		Game.map[location.x][location.y] = new CharacterCell(null);
+		Game.check[location.x][location.y] = 1;
+		
 		
 	}
 
