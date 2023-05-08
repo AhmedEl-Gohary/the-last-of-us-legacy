@@ -21,6 +21,15 @@ public class Zombie extends Character {
 	public void onCharacterDeath() {
 		super.onCharacterDeath();
 		Game.removeZombie(this);
+
+	}
+	
+	public void attack() {
+		try {
+			super.attack();
+		} catch (InvalidTargetException | NotEnoughActionsException e) {
+			
+		}
 	}
 	
 	public void attackAdjacentHero() {
@@ -35,13 +44,7 @@ public class Zombie extends Character {
 					Character character = ((CharacterCell) cell).getCharacter();
 					if (character != null && character instanceof Hero) {
 						setTarget(character);
-						try {
-							attack();
-						} catch (InvalidTargetException e) {
-							e.printStackTrace();
-						} catch (NotEnoughActionsException e) {
-							e.printStackTrace();
-						}
+						attack();
 						return;
 					}
 				}

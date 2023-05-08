@@ -85,7 +85,7 @@ public abstract class Character {
 	}
 
 	public void attack() throws InvalidTargetException, NotEnoughActionsException {
-		if (!isAdjacent()) {
+		if (target == null || !isAdjacent()) {
 			throw new InvalidTargetException();
 		}
 		target.setCurrentHp(target.getCurrentHp() - attackDmg);
@@ -99,7 +99,5 @@ public abstract class Character {
 	public void onCharacterDeath() {
 		Game.map[location.x][location.y] = new CharacterCell(null);
 	}
-	
-	
 
 }

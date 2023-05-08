@@ -155,7 +155,7 @@ public abstract class Hero extends Character {
 	}
 	
 	public void cure() throws InvalidTargetException, NoAvailableResourcesException, NotEnoughActionsException {
-		if (!(getTarget() instanceof Zombie) || !isAdjacent()) {
+		if (getTarget() == null || !(getTarget() instanceof Zombie) || !isAdjacent()) {
 			throw new InvalidTargetException();
 		}
 		
@@ -166,7 +166,6 @@ public abstract class Hero extends Character {
 		if (getActionsAvailable() <= 0) {
 			throw new NotEnoughActionsException();
 		}
-		
 		vaccineInventory.get(0).use(this);
 		
 		// Decrement Available actions
