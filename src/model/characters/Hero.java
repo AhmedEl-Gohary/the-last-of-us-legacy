@@ -167,30 +167,10 @@ public abstract class Hero extends Character {
 			throw new NotEnoughActionsException();
 		}
 		
-		Point p = getTarget().getLocation();
-		
-		// Get random hero
-		Random random = new Random();
-		int idx = random.nextInt(Game.availableHeroes.size());
-		Hero hero = Game.availableHeroes.remove(idx);
-		
-		// Remove zombie
-		Game.zombies.remove(getTarget());
-		
-		// Update the map
-		Game.map[p.x][p.y] = new CharacterCell(hero);
-		
-		// Add new hero
-		Game.heroes.add(hero);
-		
-		// Set location and visible cells of the new hero
-		hero.setLocation(p);
-		setVisibleCells(p.x, p.y);
-		
-		// Remove one vaccine
-		getVaccineInventory().get(0).use(this);
+		vaccineInventory.get(0).use(this);
 		
 		// Decrement Available actions
 		actionsAvailable--;
+		
 	}
 }

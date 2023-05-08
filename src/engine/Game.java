@@ -156,10 +156,10 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 		setMap(false);
 		zombies.forEach(zombie -> zombie.attackAdjacentHero());
 		heroes.forEach(hero -> {
+			hero.setVisibleCells(hero.getLocation().x, hero.getLocation().y);
 			hero.setActionsAvailable(hero.getMaxActions());
 			hero.setSpecialAction(false);
 			hero.setTarget(null);
-			hero.setVisibleCells(hero.getLocation().x, hero.getLocation().y);
 		});
 		addZombie();
 	}

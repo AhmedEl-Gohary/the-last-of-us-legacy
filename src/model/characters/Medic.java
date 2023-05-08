@@ -10,7 +10,7 @@ public class Medic extends Hero {
 	}
 	
 	public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
-		if (!(getTarget() instanceof Hero)) {
+		if (!(getTarget() instanceof Hero) || !isAdjacent()) {
 			throw new InvalidTargetException();
 		}
 		super.useSpecial();
