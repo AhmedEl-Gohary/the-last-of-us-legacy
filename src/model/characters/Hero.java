@@ -107,6 +107,10 @@ public abstract class Hero extends Character {
 	}
 	
 	public void move(Direction direction) throws MovementException, NotEnoughActionsException {
+		if (getCurrentHp()<=0) {
+			onCharacterDeath();
+			return;
+		}
 		Point p = dirToPoint(direction);
 		if (!Valid.isLocationValid(p)) {
 			throw new MovementException();

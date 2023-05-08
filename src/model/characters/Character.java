@@ -98,6 +98,7 @@ public abstract class Character {
 	
 	public void onCharacterDeath() {
 		Game.map[location.x][location.y] = new CharacterCell(null);
+		
 	}
 
 }
