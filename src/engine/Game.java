@@ -20,7 +20,6 @@ import model.world.CollectibleCell;
 import model.world.TrapCell;
 
 public class Game {
-	
 	// Read-write static variables
 	public static ArrayList<Hero> availableHeroes = new ArrayList<>();
 	public static ArrayList<Hero> heroes = new ArrayList<>();
@@ -144,6 +143,7 @@ public class Game {
 		spawnZombies();
 		spawnCollectibles();
 	}
+	// now we will continue after start game
 	
 	/*
 	 * public static void endTurn(): This method is called when the player decides to end the turn.
