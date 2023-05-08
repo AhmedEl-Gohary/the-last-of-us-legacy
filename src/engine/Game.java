@@ -58,8 +58,8 @@ public class Game {
 	public static void setMap(boolean flag) {
 		for(int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				if (Game.map[i][j] != null) {
-					Game.map[i][j].setVisible(flag);
+				if (map[i][j] != null) {
+					map[i][j].setVisible(flag);
 				}
 			}
 		}
@@ -116,7 +116,7 @@ public class Game {
 		hero.setVisibleCells(0, 0);
 	}
 	
-	private static void addZombie() {
+	public static void addZombie() {
 		Point p = getRandomPos();
 		Zombie zombie = new Zombie();
 		map[p.x][p.y] = new CharacterCell(zombie);
@@ -152,9 +152,6 @@ reset each hero’s actions, target, and special, update the map visibility in t
 cells adjacent to heroes are visible, and finally spawn a zombie randomly on the map.
 	 */
 	
-	
-	
-	// TODO: complete
 	public static void endTurn() {
 		setMap(false);
 		zombies.forEach(zombie -> zombie.attackAdjacentHero());
@@ -165,6 +162,14 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 			hero.setVisibleCells(hero.getLocation().x, hero.getLocation().y);
 		});
 		addZombie();
+	}
+	
+	public static boolean checkWin() {
+		return heroes.size() >= 5 && Vaccine.vaccineCount == 0;
+	}
+	
+	public static boolean checkGameOver() {
+		return Vaccine.vaccineCount == 0 || heroes.size() == 0;
 	}
 	
 }

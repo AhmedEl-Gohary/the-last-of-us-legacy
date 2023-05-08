@@ -4,7 +4,10 @@ import model.characters.Hero;
 
 public class Vaccine implements Collectible {
 
+	public static int vaccineCount = 5;
+	
 	public Vaccine() {}
+	
 	
 	// Adds the vaccine picked by the hero to his corresponding ArrayList
 	@Override
@@ -16,6 +19,7 @@ public class Vaccine implements Collectible {
 	@Override
 	public void use(Hero hero) {
 		hero.getVaccineInventory().remove(this);
+		vaccineCount--;
 	}
 	
 }
