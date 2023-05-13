@@ -15,7 +15,7 @@ import model.world.TrapCell;
 public class Valid {
 
 	public static boolean isLocationValid(Point p) {
-		return !(p.x < 0 || p.x >= 15 || p.y < 0 || p.y >= 15);
+		return p.x >= 0 && p.x < 15 && p.y >= 0 && p.y < 15;
 	}
 
 	public static boolean isActionValid(Hero hero) {

@@ -52,8 +52,8 @@ public class Game {
 	}
 	
 	public static void removeZombie(Zombie zombie) {
-		zombies.remove(zombie);
 		addZombie();
+		zombies.remove(zombie);
 	}
 	
 	public static void setMap(boolean flag) {
@@ -76,8 +76,17 @@ public class Game {
 	
 	
 	private static boolean isFree(Point p) {
-		return	map[p.x][p.y] instanceof CharacterCell && 
-					((CharacterCell) map[p.x][p.y]).getCharacter() == null && check[p.x][p.y] == 0;
+		if (map[p.x][p.y] instanceof CharacterCell) {
+			return ((CharacterCell) map[p.x][p.y]).getCharacter() == null && check[p.x][p.y] == 0;
+		} 
+		if (map[p.x][p.y] instanceof CollectibleCell) {
+			return ((CollectibleCell) map[p.x][p.y]).getCollectible() == null && check[p.x][p.y] == 0;
+		}
+		if (map[p.x][p.y] instanceof TrapCell) {
+			return ((TrapCell) map[p.x][p.y]) == null && check[p.x][p.y] == 0;
+		}
+		return true;
+		
 	}
 	
 	
@@ -87,7 +96,7 @@ public class Game {
 		do {
 			row = random.nextInt(15);
 			column = random.nextInt(15);
-		} while (!isFree(new Point(row, column)));
+		} while (!isFree(new Point(row, column)) && (row > 0 || column > 0));
 		
 		return new Point(row, column);
 	}
@@ -140,10 +149,10 @@ public class Game {
 				map[i][j] = new CharacterCell(null);
 			}
 		}
-		spawnHero(hero);
+		spawnCollectibles();
 		spawnTraps();
 		spawnZombies();
-		spawnCollectibles();
+		spawnHero(hero);
 	}
 	
 	// now we will continue after start game
@@ -161,13 +170,14 @@ cells adjacent to heroes are visible, and finally spawn a zombie randomly on the
 			zombie.attack();
 			zombie.setTarget(null);
 		});
+		addZombie();
+
 		heroes.forEach(hero -> {
 			hero.setVisibleCells(hero.getLocation().x, hero.getLocation().y);
 			hero.setActionsAvailable(hero.getMaxActions());
 			hero.setSpecialAction(false);
 			hero.setTarget(null);
 		});
-		addZombie();
 		for (int i = 0;i<15;i++) {
 			for (int j = 0;j<15;j++) check[i][j] = 0;
 		}

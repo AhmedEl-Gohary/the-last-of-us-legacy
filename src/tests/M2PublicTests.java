@@ -4115,7 +4115,6 @@ public class M2PublicTests {
 		assertTrue("Hero cell should be visible when starting the game", (boolean) fd.get(map[0][0]));
 
 	}
-
 	@Test(timeout = 10000)
 	public void testStartGameAdjacentCellsVisibility() throws Exception {
 		resetGameStatics();
@@ -4134,7 +4133,7 @@ public class M2PublicTests {
 		assertTrue("Hero's adjacent cells should be visible when starting the game", (boolean) fd.get(map[0][1]));
 
 	}
-
+ 
 	@Test(timeout = 10000)
 	public void testStartGameAdjacentCellsVisibility3() throws Exception {
 		resetGameStatics();
